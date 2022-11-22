@@ -34,16 +34,16 @@ var questions = [
   },
 ];
 
-var form = document.querySelector(".form_question");
-var tittle = document.querySelector(".title_question");
-var answers = document.querySelector(".answer");
-var choices = document.getElementsByName("choice");
-var submitBtn = document.querySelector("submitBtn");
-var result = document.querySelector(".result");
+let form = document.querySelector(".form_question");
+let tittle = document.querySelector(".title_question");
+let answers = document.querySelector(".answer");
+let choices = document.getElementsByName("choice");
+let submitBtn = document.querySelector("submitBtn");
+let result = document.querySelector(".result");
 var pos = 0;
 var index = 0;
 var point = 0;
-var chA, chB, chC, choice;
+let chA, chB, chC, choice;
 
 function renderQuestion(pos) {
   if (pos >= questions.length) {
@@ -90,10 +90,10 @@ function next() {
 }
 
 function prev() {
-  checkResult();
   index--;
   if (index < 0) {
     index = 0;
   }
   renderQuestion(index);
+  // checkResult();
 }
