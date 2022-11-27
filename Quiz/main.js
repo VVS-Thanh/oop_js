@@ -43,10 +43,9 @@ let answers = document.querySelector(".answer");
 let choices = document.getElementsByName("choice");
 let submitBtn = document.querySelector("submitBtn");
 let result = document.querySelector(".result");
-var pos = 0;
-var index = 0;
-var point = 0;
-let chA, chB, chC, choice;
+
+let index = 0;
+
 function selectAnswer(elementSelected) {
   const value = elementSelected.value;
   questions[index].answerSeleted = value
