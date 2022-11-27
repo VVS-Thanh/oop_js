@@ -13,6 +13,7 @@ var questions = [
       c: "115",
     },
     correctAnswer: "b",
+    answerSeleted: null
   },
   {
     title: "What is 2",
@@ -22,6 +23,7 @@ var questions = [
       c: "115",
     },
     correctAnswer: "a",
+    answerSeleted: null
   },
   {
     title: "What is 3",
@@ -31,6 +33,7 @@ var questions = [
       c: "115",
     },
     correctAnswer: "c",
+    answerSeleted: null
   },
 ];
 
@@ -44,56 +47,98 @@ var pos = 0;
 var index = 0;
 var point = 0;
 let chA, chB, chC, choice;
+function selectAnswer(elementSelected) {
+  const value = elementSelected.value;
+  questions[index].answerSeleted = value
+  elementSelected.checked = 'checked'
+}
 
 function renderQuestion(pos) {
-  if (pos >= questions.length) {
-    result.innerHTML = `<h2>Correct ${point} / ${questions.length}</h2>`;
-    document.querySelector(".form_question").style.display = "none";
-    document.getElementById("nextBtn").style.display = "none";
-    document.getElementById("backBtn").style.display = "none";
-    pos = 0;
-    point = 0;
-    return false;
-  }
+
+
   tittle = questions[pos].title;
   form.innerHTML = `<h2 class="title_question">${tittle}</h2>`;
-  chA = questions[pos].answer.a;
-  chB = questions[pos].answer.b;
-  chC = questions[pos].answer.c;
-  form.innerHTML +=
-    "<input type='radio' name='choice' value='a'> " + chA + "<br>";
-  form.innerHTML +=
-    "<input type='radio' name='choice' value='b'> " + chB + "<br>";
-  form.innerHTML +=
-    "<input type='radio' name='choice' value='c'> " + chC + "<br><br>";
+
+  if (pos === 0) {
+    document.getElementById("backBtn").style.display = "none";
+  } else {
+    document.getElementById("backBtn").style.display = "block";
+  }
+  if (pos === questions.length - 1) {
+    document.getElementById("nextBtn").style.display = "none";
+  } else {
+    document.getElementById("nextBtn").style.display = "block";
+  }
+
+
+  for (const answer in questions[pos].answer) {
+    const checked = questions[pos].answerSeleted === questions[pos].answer[answer]
+    if (checked) {
+      form.innerHTML +=
+        `<input 
+          type='radio' 
+          name='choice' 
+          id=${questions[pos].answer[answer]}
+          value=${questions[pos].answer[answer]} 
+          checked
+          onchange="selectAnswer(this)"
+          > 
+          ${questions[pos].answer[answer]} <br>`;
+
+    } else {
+      form.innerHTML +=
+        `<input 
+          type='radio' 
+          name='choice' 
+          id=${questions[pos].answer[answer]}
+          value=${questions[pos].answer[answer]} 
+          onchange="selectAnswer(this)"
+          > 
+          ${questions[pos].answer[answer]} <br>`;
+    }
+
+  }
+
+}
+
+function submitAnswer(mark) {
+
+  result.innerHTML = `<h2>Correct ${mark} / ${questions.length}</h2>`;
+  document.querySelector(".form_question").style.display = "none";
+  document.getElementById("nextBtn").style.display = "none";
+  document.getElementById("backBtn").style.display = "none";
+  document.getElementById("submitBtn").style.display = "none";
 }
 
 function checkResult() {
-  for (var i = 0; i < choices.length; i++) {
-    if (choices[i].checked) {
-      choice = choices[i].value;
-      if (choice === questions[pos].correctAnswer) {
-        point++;
-      }
-    }
+  const noAnswer = questions.filter(el => el.answerSeleted)
+  if (noAnswer.length !== questions.length) {
+    alert('please choose the anser')
+    return
   }
-  pos++;
-  renderQuestion(pos);
+  const mark = questions.reduce((pre, current) => {
+    if (current.answerSeleted.trim() === current.answer[current.correctAnswer].trim()) {
+      pre += 1
+    }
+    return pre
+  }, 0)
+
+  submitAnswer(mark);
 }
 function next() {
-  checkResult();
+  // checkResult();
   index++;
-  if (index >= questions.length) {
-    index = questions.length - 1;
-  }
+  // if (index >= questions.length) {
+  //   index = questions.length - 1;
+  // }
   renderQuestion(index);
 }
 
 function prev() {
   index--;
-  if (index < 0) {
-    index = 0;
-  }
+  // if (index < 0) {
+  //   index = 0;
+  // }
   renderQuestion(index);
   // checkResult();
 }
